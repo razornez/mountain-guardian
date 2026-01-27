@@ -276,6 +276,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+        </div>
       </main>
     </div>
   );
