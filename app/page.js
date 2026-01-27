@@ -7,15 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { TrendingDown, AlertTriangle, Activity, Calendar } from 'lucide-react';
+import { TopHeader } from '@/components/top-header';
 import Sidebar from '@/components/Sidebar';
 import { mountains, alertLogs, historicalData, calculateMetrics } from '@/constants/data';
 
 // Dynamic import for MapView to avoid SSR issues with Leaflet
-const MapView = dynamic(() => import('@/components/ThemeAwareMapView'), { 
+const MapView = dynamic(() => import('@/components/MapView'), { 
   ssr: false,
   loading: () => (
-    <div className="h-full w-full bg-slate-800 dark:bg-slate-900 rounded-xl flex items-center justify-center">
-      <div className="text-slate-400">Loading map...</div>
+    <div className="h-full w-full bg-muted rounded-xl flex items-center justify-center transition-colors duration-300">
+      <div className="text-muted-foreground">Loading map...</div>
     </div>
   )
 });
