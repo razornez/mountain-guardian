@@ -55,7 +55,9 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
   }, []);
 
   useEffect(() => {
-    if (!map) return;
+    if (!mapRef.current || !mapReady) return;
+    
+    const map = mapRef.current;
     
     // Add pulse animation
     const style = document.createElement('style');
@@ -169,7 +171,7 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
     return () => {
       document.head.removeChild(style);
     };
-  }, [map, mountains, router]);
+  }, [mapReady, mountains, router]);
 
   return (
     <div 
