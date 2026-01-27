@@ -221,11 +221,14 @@ frontend:
     file: "/app/app/mountain/[id]/page.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Implemented detail page with header (name, region, last scan), 4 key metric cards, split-screen satellite comparison (2019 baseline vs 2024 current with image filters), change detection analysis, and toggle between split/single view"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING PASSED: Mountain detail pages work perfectly for both critical (Tangkuban Perahu) and stable (Gede) mountains. All 4 key metric cards display correctly, split-screen satellite comparison shows 2019 vs 2024 images with proper badges, view toggle buttons work, and alert information is correctly shown only for critical/warning mountains."
   
   - task: "Timeline Controls and Historical Chart"
     implemented: true
