@@ -2,7 +2,7 @@
 
 A high-end environmental surveillance platform for monitoring deforestation and land clearing in West Java, Indonesia using Sentinel-2 satellite data.
 
-## 🌟 Mission
+## 🌟 Mission.
 
 **Who**: Built for environmental activists, government forestry departments, and regional observers in West Java, Indonesia.
 
