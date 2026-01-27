@@ -167,11 +167,14 @@ frontend:
     file: "/app/components/MapView.tsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
         comment: "Implemented custom markers with color coding (red/yellow/green), CSS pulse animation for critical status with recent activity, and clickable popups with mountain details"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING PASSED: All 8 mountain markers are visible and properly color-coded (red for critical, yellow for warning, green for stable). Pulse animation is working for critical mountains with recent activity. Markers are clickable and navigate to detail pages successfully."
   
   - task: "Destruction Trend Chart"
     implemented: true
