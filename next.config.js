@@ -1,5 +1,6 @@
 const nextConfig = {
-  output: 'standalone',
+  // Remove 'output: standalone' for Vercel deployment
+  // Use 'standalone' only for Docker/self-hosted deployments
   images: {
     unoptimized: true,
   },
