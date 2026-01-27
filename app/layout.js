@@ -1,8 +1,38 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Next.js MongoDB Template',
-  description: 'A simple template with App Router, MongoDB, and shadcn/ui',
+  title: 'MonitorGunung.com - Environmental Surveillance Platform',
+  description: 'Satellite monitoring dashboard for tracking deforestation in West Java, Indonesia. Real-time forest coverage analysis using Sentinel-2 data.',
+  keywords: ['environmental monitoring', 'deforestation', 'satellite imagery', 'West Java', 'Indonesia', 'forest conservation'],
+  authors: [{ name: 'MonitorGunung Team' }],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/icon.png',
+  },
+  openGraph: {
+    title: 'MonitorGunung.com - Environmental Surveillance',
+    description: 'Real-time deforestation monitoring in West Java mountains',
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'MonitorGunung',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MonitorGunung.com',
+    description: 'Environmental Surveillance Platform for West Java',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({ children }) {

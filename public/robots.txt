@@ -1,0 +1,5 @@
+# MonitorGunung.com - Environmental Surveillance Platform
+User-agent: *
+Allow: /
+
+Sitemap: https://monitorgunung.com/sitemap.xml
