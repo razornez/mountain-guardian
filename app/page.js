@@ -67,11 +67,13 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden transition-colors duration-300">
       <Sidebar />
       
-      <main className="flex-1 ml-0 lg:ml-72 overflow-y-auto w-full lg:w-auto">
-        {/* Hero Section with Background */}
+      <main className="flex-1 ml-0 lg:ml-72 overflow-y-auto w-full lg:w-auto flex flex-col">
+        <TopHeader />
+        
+        <div className="flex-1">{/* Hero Section with Background */}
         <div 
           className="relative h-64 bg-cover bg-center"
           style={{
@@ -79,18 +81,18 @@ const Dashboard = () => {
             backgroundPosition: 'center'
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/90 to-slate-950"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/90 to-background"></div>
           <div className="relative h-full flex flex-col justify-center px-8">
-            <h1 className="text-4xl font-bold text-white mb-2">Regional Satellite Monitoring</h1>
-            <p className="text-slate-300 text-lg">West Java Environmental Surveillance Platform</p>
+            <h1 className="text-4xl font-bold text-foreground mb-2">Regional Satellite Monitoring</h1>
+            <p className="text-muted-foreground text-lg">West Java Environmental Surveillance Platform</p>
             <div className="mt-4 flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-slate-300">System Online</span>
+                <span className="text-sm text-muted-foreground">System Online</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-slate-400" />
-                <span className="text-sm text-slate-300">Last Updated: June 25, 2024</span>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Last Updated: June 25, 2024</span>
               </div>
             </div>
           </div>
