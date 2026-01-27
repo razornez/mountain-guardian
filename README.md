@@ -40,13 +40,23 @@ A high-end environmental surveillance platform for monitoring deforestation and 
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15.5+ with App Router
 - **Language**: TypeScript for type safety
+- **Runtime**: React 19.2+
 - **Styling**: Tailwind CSS + Shadcn/UI components
 - **Maps**: Leaflet with Esri WorldImagery and CartoDB tiles
 - **Charts**: Recharts for data visualization
 - **Icons**: Lucide React
 - **Database**: Modular data structure ready for Supabase/PostgreSQL integration
+
+## ⚡ Recent Updates
+
+**January 2025**: Upgraded to Next.js 15 and React 19
+- ✅ Next.js 15.5.10 with Turbopack stability
+- ✅ React 19.2.4 with React Compiler support
+- ✅ Enhanced performance and faster HMR
+- ✅ Zero breaking changes required
+- 📄 See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for details
 
 ## 📦 Installation
 
