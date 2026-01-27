@@ -1,11 +1,11 @@
 import './globals.css'
-import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 
 export const metadata = {
-  title: 'MonitorGunung.com - Environmental Surveillance Platform',
+  title: 'Mountain Guardian - Environmental Surveillance Platform',
   description: 'Satellite monitoring dashboard for tracking deforestation in West Java, Indonesia. Real-time forest coverage analysis using Sentinel-2 data.',
   keywords: ['environmental monitoring', 'deforestation', 'satellite imagery', 'West Java', 'Indonesia', 'forest conservation'],
-  authors: [{ name: 'MonitorGunung Team' }],
+  authors: [{ name: 'Mountain Guardian Team' }],
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -14,15 +14,15 @@ export const metadata = {
     apple: '/icon.png',
   },
   openGraph: {
-    title: 'MonitorGunung.com - Environmental Surveillance',
+    title: 'Mountain Guardian - Environmental Surveillance',
     description: 'Real-time deforestation monitoring in West Java mountains',
     type: 'website',
     locale: 'en_US',
-    siteName: 'MonitorGunung',
+    siteName: 'Mountain Guardian',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MonitorGunung.com',
+    title: 'Mountain Guardian',
     description: 'Environmental Surveillance Platform for West Java',
   },
   robots: {
@@ -37,15 +37,23 @@ export const viewport = {
   maximumScale: 5,
 }
 
+/**
+ * Root Layout Component
+ * 
+ * Wraps the entire application with ThemeProvider.
+ * Defaults to Light Mode with system preference opt-in.
+ * Prevents FOUC with suppressHydrationWarning.
+ */
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="transition-colors duration-300">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={true}
           disableTransitionOnChange={false}
+          storageKey="mountain-guardian-theme"
         >
           {children}
         </ThemeProvider>
