@@ -2,23 +2,49 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import L from 'leaflet';
 import { Mountain } from '@/constants/data';
 import 'leaflet/dist/leaflet.css';
+
+// Fix for default marker icons in Next.js
+if (typeof window !== 'undefined') {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  });
+}
 
 interface MapViewProps {
   mountains: Mountain[];
 }
 
+/**
+ * Theme-Aware Map Component
+ * 
+ * Applies CSS filters to the map in Dark Mode for visual consistency.
+ * Light Mode: No filters, natural map appearance
+ * Dark Mode: Inverted colors with adjusted brightness/contrast
+ */
 const MapView: React.FC<MapViewProps> = ({ mountains }) => {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
   const mapRef = React.useRef<L.Map | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const mapContainerRef = React.useRef<HTMLDivElement>(null);
 
+  // Prevent hydration mismatch
   useEffect(() => {
-    if (typeof window === 'undefined' || mapRef.current) return;
+    setMounted(true);
+  }, []);
+
+  // Initialize map
+  useEffect(() => {
+    if (typeof window === 'undefined' || !mounted || mapRef.current) return;
     
-    // Check if map container exists
     const container = document.getElementById('map');
     if (!container) return;
     
@@ -30,14 +56,10 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
     try {
       const newMap = L.map('map').setView([-6.9, 107.6], 9);
       
-      // Add Esri satellite imagery
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; <a href="https://www.esri.com/">Esri</a>'
-      }).addTo(newMap);
-      
-      // Add CartoDB dark labels
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+      // Add tile layer (OpenStreetMap for both modes)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
       }).addTo(newMap);
       
       mapRef.current = newMap;
@@ -52,8 +74,9 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [mounted]);
 
+  // Add markers
   useEffect(() => {
     if (!mapRef.current || !mapReady) return;
     
@@ -173,15 +196,25 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
     };
   }, [mapReady, mountains, router]);
 
+  if (!mounted) {
+    return (
+      <div className="h-full w-full bg-muted rounded-xl flex items-center justify-center transition-colors duration-300">
+        <div className="text-muted-foreground">Loading map...</div>
+      </div>
+    );
+  }
+
   return (
     <div 
+      ref={mapContainerRef}
       id="map" 
-      style={{ 
-        height: '100%', 
-        width: '100%', 
-        borderRadius: '12px',
-        zIndex: 0 
-      }} 
+      className="h-full w-full rounded-xl transition-all duration-300"
+      style={{
+        filter: resolvedTheme === 'dark' 
+          ? 'invert(100%) hue-rotate(180deg) brightness(90%) contrast(90%)' 
+          : 'none',
+        zIndex: 0,
+      }}
     />
   );
 };
