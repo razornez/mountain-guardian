@@ -12,13 +12,22 @@ interface MapViewProps {
 
 const MapView: React.FC<MapViewProps> = ({ mountains }) => {
   const router = useRouter();
-  const [map, setMap] = useState<L.Map | null>(null);
+  const mapRef = React.useRef<L.Map | null>(null);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || mapRef.current) return;
     
-    // Initialize map only once
-    if (!map) {
+    // Check if map container exists
+    const container = document.getElementById('map');
+    if (!container) return;
+    
+    // Clear any existing map instance
+    if ((container as any)._leaflet_id) {
+      (container as any)._leaflet_id = undefined;
+    }
+    
+    try {
       const newMap = L.map('map').setView([-6.9, 107.6], 9);
       
       // Add Esri satellite imagery
@@ -31,12 +40,16 @@ const MapView: React.FC<MapViewProps> = ({ mountains }) => {
         attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
       }).addTo(newMap);
       
-      setMap(newMap);
+      mapRef.current = newMap;
+      setMapReady(true);
+    } catch (error) {
+      console.error('Error initializing map:', error);
     }
     
     return () => {
-      if (map) {
-        map.remove();
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
       }
     };
   }, []);
