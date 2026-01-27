@@ -187,6 +187,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "Created Recharts line chart showing forest coverage decline from 17,610 ha (2019) to 15,495 ha (2024) with proper axes, grid, and tooltips"
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTING PASSED: Destruction trend chart renders perfectly. Recharts visualization displays forest coverage decline from 2019-2024 with proper axes, grid lines, and interactive tooltips. Chart is fully functional and displays historical data correctly."
   
   - task: "Chronological Activity Logs Table"
     implemented: true
