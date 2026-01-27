@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 /* ============================================
-   BASE STYLES & TYPOGRAPHY
+   MOUNTAIN GUARDIAN - GLOBAL STYLES
+   Professional Theme System with Light Mode Default
    ============================================ */
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
@@ -20,56 +22,65 @@ code {
 }
 
 /* ============================================
-   SMOOTH TRANSITIONS FOR THEME SWITCHING
+   SMOOTH THEME TRANSITIONS
+   300ms ease-in-out for all color properties
    ============================================ */
-* {
-  transition-property: background-color, border-color, color, fill, stroke;
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
 
-/* Prevent transition on specific elements */
+/* Exclude elements that shouldn't transition */
 .no-transition,
-.leaflet-container,
+.leaflet-container *,
 canvas,
 video,
-img {
+img,
+svg {
   transition: none !important;
 }
 
 /* ============================================
    SHADCN/UI DESIGN TOKENS
+   Using Tailwind class strategy
    ============================================ */
 @layer base {
   :root {
-    /* Light Mode - Professional Clean Design */
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
+    /* ========================================
+       LIGHT MODE (DEFAULT)
+       Clean, high-contrast, professional
+       Predominant slate-50 background
+       ======================================== */
+    --background: 210 40% 98%;          /* Slate-50 */
+    --foreground: 222.2 47.4% 11.2%;    /* Slate-900 */
     
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;                   /* White */
+    --card-foreground: 222.2 47.4% 11.2%; /* Slate-900 */
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100%;                /* White */
+    --popover-foreground: 222.2 47.4% 11.2%; /* Slate-900 */
     
-    --primary: 142 76% 36%; /* Emerald-600 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 142 76% 36%;              /* Emerald-600 */
+    --primary-foreground: 0 0% 100%;     /* White */
     
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96.1%;          /* Slate-100 */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Slate-900 */
     
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%;              /* Slate-100 */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Slate-600 */
     
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 96.1%;             /* Slate-100 */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Slate-900 */
     
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;        /* Red-500 */
+    --destructive-foreground: 0 0% 98%;  /* White */
     
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
+    --border: 214.3 31.8% 91.4%;         /* Slate-200 */
+    --input: 214.3 31.8% 91.4%;          /* Slate-200 */
+    --ring: 142 76% 36%;                 /* Emerald-600 */
     
     --radius: 0.5rem;
     
@@ -92,34 +103,39 @@ img {
   }
   
   .dark {
-    /* Dark Mode - Deep Surveillance Aesthetic */
-    --background: 222.2 47.4% 2%; /* Slate-950 */
-    --foreground: 210 40% 98%;
+    /* ========================================
+       DARK MODE
+       Deep, modern aesthetic
+       Predominant zinc-950/slate-950 background
+       Sufficient contrast and readability
+       ======================================== */
+    --background: 222.2 84% 3%;          /* Zinc-950 / Slate-950 */
+    --foreground: 210 40% 98%;           /* Slate-50 */
     
-    --card: 217.2 32.6% 10%; /* Slate-900 */
-    --card-foreground: 210 40% 98%;
+    --card: 222.2 84% 8%;                /* Slate-900 */
+    --card-foreground: 210 40% 98%;      /* Slate-50 */
     
-    --popover: 222.2 47.4% 11.2%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222.2 84% 8%;             /* Slate-900 */
+    --popover-foreground: 210 40% 98%;   /* Slate-50 */
     
-    --primary: 142 76% 36%; /* Emerald-600 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 142 76% 36%;              /* Emerald-600 */
+    --primary-foreground: 0 0% 100%;     /* White */
     
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;      /* Slate-800 */
+    --secondary-foreground: 210 40% 98%; /* Slate-50 */
     
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217.2 32.6% 17.5%;          /* Slate-800 */
+    --muted-foreground: 215 20.2% 65.1%; /* Slate-400 */
     
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 217.2 32.6% 17.5%;         /* Slate-800 */
+    --accent-foreground: 210 40% 98%;    /* Slate-50 */
     
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;        /* Red-900 */
+    --destructive-foreground: 210 40% 98%; /* Slate-50 */
     
-    --border: 217.2 32.6% 17.5%; /* Subtle borders */
-    --input: 217.2 32.6% 17.5%;
-    --ring: 142 76% 36%;
+    --border: 217.2 32.6% 17.5%;         /* Slate-800 */
+    --input: 217.2 32.6% 17.5%;          /* Slate-800 */
+    --ring: 142 76% 36%;                 /* Emerald-600 */
     
     /* Chart colors for dark mode */
     --chart-1: 142 76% 36%;
@@ -129,10 +145,10 @@ img {
     --chart-5: 27 87% 67%;
     
     /* Sidebar dark mode */
-    --sidebar-background: 217.2 32.6% 10%;
+    --sidebar-background: 222.2 84% 8%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 210 40% 98%;
-    --sidebar-primary-foreground: 217.2 32.6% 10%;
+    --sidebar-primary-foreground: 222.2 84% 8%;
     --sidebar-accent: 217.2 32.6% 15%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217.2 32.6% 17.5%;
@@ -141,23 +157,30 @@ img {
 }
 
 /* ============================================
-   UTILITY CLASSES
+   BASE STYLES
    ============================================ */
 @layer base {
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
   }
 }
 
 /* ============================================
    CUSTOM SCROLLBAR
+   Theme-aware styling
    ============================================ */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -166,6 +189,7 @@ img {
 
 ::-webkit-scrollbar-thumb {
   @apply bg-muted-foreground/30 rounded-md hover:bg-muted-foreground/50;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .dark ::-webkit-scrollbar-thumb {
@@ -174,13 +198,31 @@ img {
 
 /* ============================================
    LEAFLET MAP CUSTOMIZATION
+   Dark Mode CSS Filter Applied
    ============================================ */
 .leaflet-container {
   font-family: inherit;
+  background-color: transparent !important;
 }
 
+/* Map controls adapt to theme */
+.leaflet-control-zoom a {
+  @apply transition-colors duration-300;
+}
+
+.dark .leaflet-control-zoom a {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  color: #f8fafc !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+}
+
+.dark .leaflet-control-zoom a:hover {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+/* Popup styling */
 .leaflet-popup-content-wrapper {
-  @apply rounded-lg shadow-lg;
+  @apply rounded-lg shadow-lg transition-colors duration-300;
 }
 
 .dark .leaflet-popup-content-wrapper {
@@ -195,6 +237,7 @@ img {
 /* Custom marker styles */
 .custom-marker {
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  transition: filter 0.3s ease-in-out;
 }
 
 .dark .custom-marker {
@@ -203,6 +246,7 @@ img {
 
 /* ============================================
    RECHARTS CUSTOMIZATION
+   Theme-aware chart styling
    ============================================ */
 .recharts-surface {
   @apply transition-colors duration-300;
@@ -212,24 +256,35 @@ img {
   @apply transition-colors duration-300;
 }
 
-/* ============================================
-   PROFESSIONAL LIGHT MODE ENHANCEMENTS
-   ============================================ */
-.light {
-  /* Add subtle texture to cards in light mode */
-  --card-texture: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.02));
+.recharts-default-tooltip {
+  @apply transition-colors duration-300 !important;
 }
 
-.light .card-enhanced {
-  background: var(--card-texture), hsl(var(--card));
+.dark .recharts-default-tooltip {
+  background-color: rgba(30, 41, 59, 0.95) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+}
+
+/* ============================================
+   CARD ENHANCEMENTS
+   Professional shadows and borders
+   ============================================ */
+.card-enhanced {
+  @apply transition-all duration-300;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.dark .card-enhanced {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.2);
 }
 
 /* ============================================
    FOCUS VISIBLE STYLES
+   Accessibility with theme support
    ============================================ */
 *:focus-visible {
   @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 /* ============================================
@@ -253,6 +308,65 @@ img {
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-in-out;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.glass-effect {
+  @apply backdrop-blur-md bg-background/80;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
