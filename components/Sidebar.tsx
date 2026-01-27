@@ -57,13 +57,16 @@ const Sidebar = () => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo */}
-        <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center space-x-3">
-            <Satellite className="h-8 w-8 text-emerald-500" />
-            <div>
-              <h1 className="text-xl font-bold text-white">MonitorGunung</h1>
-              <p className="text-xs text-slate-400">Environmental Surveillance</p>
+        <div className="p-6 border-b border-slate-800 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Satellite className="h-8 w-8 text-emerald-500" />
+              <div>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white\">MonitorGunung</h1>
+                <p className="text-xs text-slate-600 dark:text-slate-400\">Environmental Surveillance</p>
+              </div>
             </div>
+            <ThemeToggle />
           </div>
         </div>
 
