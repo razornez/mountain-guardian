@@ -1,6 +1,6 @@
 # MonitorGunung.com - Environmental Surveillance Platform
 
-A high-end environmental surveillance platform for monitoring deforestation and land clearing in West Java, Indonesia using Sentinel-2 satellite data.
+A high-end environmental surveillance platform for monitoring deforestation and land clearing in West Java, Indonesia using Sentinel-2 satellite data
 
 ## 🌟 Mission.
 
