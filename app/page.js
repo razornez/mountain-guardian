@@ -11,10 +11,10 @@ import Sidebar from '@/components/Sidebar';
 import { mountains, alertLogs, historicalData, calculateMetrics } from '@/constants/data';
 
 // Dynamic import for MapView to avoid SSR issues with Leaflet
-const MapView = dynamic(() => import('@/components/MapView'), { 
+const MapView = dynamic(() => import('@/components/ThemeAwareMapView'), { 
   ssr: false,
   loading: () => (
-    <div className="h-full w-full bg-slate-800 rounded-xl flex items-center justify-center">
+    <div className="h-full w-full bg-slate-800 dark:bg-slate-900 rounded-xl flex items-center justify-center">
       <div className="text-slate-400">Loading map...</div>
     </div>
   )
