@@ -1,104 +1,95 @@
-import { MongoClient } from 'mongodb'
-import { v4 as uuidv4 } from 'uuid'
-import { NextResponse } from 'next/server'
+import { MongoClient } from 'mongodb';
+import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
+import { NextResponse } from 'next/server';
+import { apiFailure, apiSuccess } from '@/lib/api/response';
 
-// MongoDB connection
-let client
-let db
+let client;
+let db;
+
+const statusPayloadSchema = z.object({
+  client_name: z.string().trim().min(1).max(120),
+});
 
 async function connectToMongo() {
   if (!client) {
-    client = new MongoClient(process.env.MONGO_URL)
-    await client.connect()
-    db = client.db(process.env.DB_NAME)
+    if (!process.env.MONGO_URL || !process.env.DB_NAME) {
+      throw new Error('Missing MongoDB configuration');
+    }
+
+    client = new MongoClient(process.env.MONGO_URL);
+    await client.connect();
+    db = client.db(process.env.DB_NAME);
   }
-  return db
+
+  return db;
 }
 
-// Helper function to handle CORS
 function handleCORS(response) {
-  response.headers.set('Access-Control-Allow-Origin', process.env.CORS_ORIGINS || '*')
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  response.headers.set('Access-Control-Allow-Credentials', 'true')
-  return response
+  response.headers.set('Access-Control-Allow-Origin', process.env.CORS_ORIGINS || '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  return response;
 }
 
-// OPTIONS handler for CORS
+function corsSuccess(data, status = 200) {
+  return handleCORS(apiSuccess(data, status));
+}
+
+function corsFailure(code, message, status = 400) {
+  return handleCORS(apiFailure(code, message, status));
+}
+
 export async function OPTIONS() {
-  return handleCORS(new NextResponse(null, { status: 200 }))
+  return handleCORS(new NextResponse(null, { status: 200 }));
 }
 
-// Route handler function
 async function handleRoute(request, { params }) {
-  const { path = [] } = params
-  const route = `/${path.join('/')}`
-  const method = request.method
+  const { path = [] } = params;
+  const route = `/${path.join('/')}`;
+  const method = request.method;
 
   try {
-    const db = await connectToMongo()
+    const database = await connectToMongo();
 
-    // Root endpoint - GET /api/root (since /api/ is not accessible with catch-all)
-    if (route === '/root' && method === 'GET') {
-      return handleCORS(NextResponse.json({ message: "Hello World" }))
-    }
-    // Root endpoint - GET /api/root (since /api/ is not accessible with catch-all)
-    if (route === '/' && method === 'GET') {
-      return handleCORS(NextResponse.json({ message: "Hello World" }))
+    if ((route === '/root' || route === '/') && method === 'GET') {
+      return corsSuccess({ message: 'Hello World' });
     }
 
-    // Status endpoints - POST /api/status
     if (route === '/status' && method === 'POST') {
-      const body = await request.json()
-      
-      if (!body.client_name) {
-        return handleCORS(NextResponse.json(
-          { error: "client_name is required" }, 
-          { status: 400 }
-        ))
+      const payload = await request.json();
+      const parsedPayload = statusPayloadSchema.safeParse(payload);
+
+      if (!parsedPayload.success) {
+        return corsFailure('INVALID_PAYLOAD', 'client_name wajib diisi dan maksimal 120 karakter.', 400);
       }
 
       const statusObj = {
         id: uuidv4(),
-        client_name: body.client_name,
-        timestamp: new Date()
-      }
+        client_name: parsedPayload.data.client_name,
+        timestamp: new Date(),
+      };
 
-      await db.collection('status_checks').insertOne(statusObj)
-      return handleCORS(NextResponse.json(statusObj))
+      await database.collection('status_checks').insertOne(statusObj);
+      return corsSuccess(statusObj, 201);
     }
 
-    // Status endpoints - GET /api/status
     if (route === '/status' && method === 'GET') {
-      const statusChecks = await db.collection('status_checks')
-        .find({})
-        .limit(1000)
-        .toArray()
-
-      // Remove MongoDB's _id field from response
-      const cleanedStatusChecks = statusChecks.map(({ _id, ...rest }) => rest)
-      
-      return handleCORS(NextResponse.json(cleanedStatusChecks))
+      const statusChecks = await database.collection('status_checks').find({}).limit(1000).toArray();
+      const cleanedStatusChecks = statusChecks.map(({ _id, ...rest }) => rest);
+      return corsSuccess(cleanedStatusChecks);
     }
 
-    // Route not found
-    return handleCORS(NextResponse.json(
-      { error: `Route ${route} not found` }, 
-      { status: 404 }
-    ))
-
+    return corsFailure('ROUTE_NOT_FOUND', `Route ${route} not found`, 404);
   } catch (error) {
-    console.error('API Error:', error)
-    return handleCORS(NextResponse.json(
-      { error: "Internal server error" }, 
-      { status: 500 }
-    ))
+    console.error('API Error:', error instanceof Error ? error.message : 'Unknown error');
+    return corsFailure('INTERNAL_SERVER_ERROR', 'Internal server error', 500);
   }
 }
 
-// Export all HTTP methods
-export const GET = handleRoute
-export const POST = handleRoute
-export const PUT = handleRoute
-export const DELETE = handleRoute
-export const PATCH = handleRoute
+export const GET = handleRoute;
+export const POST = handleRoute;
+export const PUT = handleRoute;
+export const DELETE = handleRoute;
+export const PATCH = handleRoute;
