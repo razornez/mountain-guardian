@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useTheme } from 'next-themes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { TrendingDown, AlertTriangle, Activity, Calendar } from 'lucide-react';
-import { TopHeader } from '@/components/top-header';
-import Sidebar from '@/components/Sidebar';
 import { mountains, alertLogs, historicalData, calculateMetrics } from '@/constants/data';
 
 // Dynamic import for MapView to avoid SSR issues with Leaflet
@@ -23,10 +22,19 @@ const MapView = dynamic(() => import('@/components/MapView'), {
 
 const Dashboard = () => {
   const [metrics, setMetrics] = useState(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     setMetrics(calculateMetrics());
   }, []);
+
+  const isDark = resolvedTheme === 'dark';
+  const chartTooltipStyle = isDark
+    ? { backgroundColor: 'hsl(222.2, 84%, 8%)', border: '1px solid hsl(217.2, 32.6%, 17.5%)', borderRadius: '8px' }
+    : { backgroundColor: 'hsl(0, 0%, 100%)', border: '1px solid hsl(214.3, 31.8%, 91.4%)', borderRadius: '8px' };
+  const chartLabelStyle = { color: isDark ? 'hsl(210, 40%, 98%)' : 'hsl(222.2, 47.4%, 11.2%)' };
+  const chartGridStroke = isDark ? '#334155' : '#e2e8f0';
+  const chartAxisStroke = isDark ? '#94a3b8' : '#64748b';
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -57,23 +65,14 @@ const Dashboard = () => {
 
   if (!metrics) {
     return (
-      <div className="flex h-screen bg-slate-950">
-        <Sidebar />
-        <main className="flex-1 lg:ml-72 p-8">
-          <div className="text-white">Loading...</div>
-        </main>
+      <div className="p-8">
+        <div className="text-foreground">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden transition-colors duration-300">
-      <Sidebar />
-      
-      <main className="flex-1 ml-0 lg:ml-72 overflow-y-auto w-full lg:w-auto flex flex-col">
-        <TopHeader />
-        
-        <div className="flex-1">
+    <div className="flex flex-col transition-colors duration-300">
           {/* Hero Section with Background */}
           <div 
             className="relative h-64 bg-cover bg-center"
@@ -102,14 +101,14 @@ const Dashboard = () => {
         <div className="p-8 space-y-6">
           {/* Executive KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-slate-900 border-slate-800">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-300">Total Forest Loss YoY</CardTitle>
+                <CardTitle className="text-sm font-medium text-card-foreground">Total Forest Loss YoY</CardTitle>
                 <TrendingDown className="h-4 w-4 text-rose-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white">{metrics.totalHectaresLost} ha</div>
-                <p className="text-xs text-slate-400 mt-1">2019 baseline vs 2024</p>
+                <div className="text-3xl font-bold text-card-foreground">{metrics.totalHectaresLost} ha</div>
+                <p className="text-xs text-muted-foreground mt-1">2019 baseline vs 2024</p>
                 <div className="mt-4 h-12">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={historicalData.slice(-6)}>
@@ -120,30 +119,30 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900 border-slate-800">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-300">Alert Center</CardTitle>
+                <CardTitle className="text-sm font-medium text-card-foreground">Alert Center</CardTitle>
                 <AlertTriangle className="h-4 w-4 text-amber-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white">{metrics.criticalAlerts}</div>
-                <p className="text-xs text-slate-400 mt-1">Critical alerts active</p>
+                <div className="text-3xl font-bold text-card-foreground">{metrics.criticalAlerts}</div>
+                <p className="text-xs text-muted-foreground mt-1">Critical alerts active</p>
                 <div className="mt-4 flex items-center space-x-2">
-                  <Badge variant="destructive" className="bg-rose-500">High Priority</Badge>
-                  <span className="text-xs text-slate-400">Requires immediate action</span>
+                  <Badge variant="destructive">High Priority</Badge>
+                  <span className="text-xs text-muted-foreground">Requires immediate action</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900 border-slate-800">
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-300">Regional Health Score</CardTitle>
+                <CardTitle className="text-sm font-medium text-card-foreground">Regional Health Score</CardTitle>
                 <Activity className="h-4 w-4 text-emerald-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white">Grade {metrics.healthGrade}</div>
-                <p className="text-xs text-slate-400 mt-1">{metrics.healthPercentage}% forest density retained</p>
-                <div className="mt-4 w-full bg-slate-800 rounded-full h-2">
+                <div className="text-3xl font-bold text-card-foreground">Grade {metrics.healthGrade}</div>
+                <p className="text-xs text-muted-foreground mt-1">{metrics.healthPercentage}% forest density retained</p>
+                <div className="mt-4 w-full bg-muted rounded-full h-2">
                   <div 
                     className={`h-2 rounded-full ${
                       metrics.healthGrade === 'A' ? 'bg-emerald-500' :
@@ -161,22 +160,22 @@ const Dashboard = () => {
           {/* Map and Chart Section */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Regional Map Hub */}
-            <Card className="bg-slate-900 border-slate-800">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-white flex items-center justify-between">
+                <CardTitle className="text-card-foreground flex items-center justify-between">
                   <span>Regional Map Hub</span>
-                  <div className="flex items-center space-x-3 text-xs">
+                  <div className="flex items-center space-x-3 text-xs text-muted-foreground">
                     <div className="flex items-center space-x-1">
-                      <div className="h-3 w-3 bg-rose-500 rounded-full"></div>
-                      <span className="text-slate-400">Critical</span>
+                      <div className="h-3 w-3 bg-rose-500 rounded-full" />
+                      <span>Critical</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <div className="h-3 w-3 bg-amber-500 rounded-full"></div>
-                      <span className="text-slate-400">Warning</span>
+                      <div className="h-3 w-3 bg-amber-500 rounded-full" />
+                      <span>Warning</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <div className="h-3 w-3 bg-emerald-500 rounded-full"></div>
-                      <span className="text-slate-400">Stable</span>
+                      <div className="h-3 w-3 bg-emerald-500 rounded-full" />
+                      <span>Stable</span>
                     </div>
                   </div>
                 </CardTitle>
@@ -185,51 +184,44 @@ const Dashboard = () => {
                 <div className="h-96">
                   <MapView mountains={mountains} />
                 </div>
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   Click markers to view detailed analysis. Red pulse indicates activity in last 7 days.
                 </p>
               </CardContent>
             </Card>
 
             {/* Destruction Trend Chart */}
-            <Card className="bg-slate-900 border-slate-800">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-white">Forest Coverage Trend (2019-2024)</CardTitle>
+                <CardTitle className="text-card-foreground">Forest Coverage Trend (2019-2024)</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-96">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={historicalData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis 
-                        dataKey="month" 
-                        stroke="#94a3b8" 
+                      <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
+                      <XAxis
+                        dataKey="month"
+                        stroke={chartAxisStroke}
                         style={{ fontSize: '12px' }}
                       />
-                      <YAxis 
-                        stroke="#94a3b8" 
+                      <YAxis
+                        stroke={chartAxisStroke}
                         style={{ fontSize: '12px' }}
-                        label={{ value: 'Hectares', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+                        label={{ value: 'Hectares', angle: -90, position: 'insideLeft', fill: chartAxisStroke }}
                       />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: '#1e293b', 
-                          border: '1px solid #334155',
-                          borderRadius: '8px'
-                        }}
-                        labelStyle={{ color: '#f1f5f9' }}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="forestCoverage" 
-                        stroke="#10b981" 
+                      <Tooltip contentStyle={chartTooltipStyle} labelStyle={chartLabelStyle} />
+                      <Line
+                        type="monotone"
+                        dataKey="forestCoverage"
+                        stroke="#10b981"
                         strokeWidth={2}
                         name="Forest Coverage"
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   Total forest coverage across all monitored mountains in West Java region.
                 </p>
               </CardContent>
@@ -237,34 +229,34 @@ const Dashboard = () => {
           </div>
 
           {/* Chronological Logs Table */}
-          <Card className="bg-slate-900 border-slate-800">
+          <Card>
             <CardHeader>
-              <CardTitle className="text-white">Recent Activity Logs</CardTitle>
+              <CardTitle className="text-card-foreground">Recent Activity Logs</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-slate-800 hover:bg-slate-800/50">
-                    <TableHead className="text-slate-300">Timestamp</TableHead>
-                    <TableHead className="text-slate-300">Mountain</TableHead>
-                    <TableHead className="text-slate-300">Event Type</TableHead>
-                    <TableHead className="text-slate-300">Impact</TableHead>
-                    <TableHead className="text-slate-300">Status</TableHead>
+                  <TableRow>
+                    <TableHead>Timestamp</TableHead>
+                    <TableHead>Mountain</TableHead>
+                    <TableHead>Event Type</TableHead>
+                    <TableHead>Impact</TableHead>
+                    <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {alertLogs.map((log) => (
-                    <TableRow key={log.id} className="border-slate-800 hover:bg-slate-800/50">
-                      <TableCell className="text-slate-400 text-sm">
+                    <TableRow key={log.id}>
+                      <TableCell className="text-muted-foreground text-sm">
                         {formatDate(log.timestamp)}
                       </TableCell>
-                      <TableCell className="text-white font-medium">
+                      <TableCell className="font-medium text-card-foreground">
                         {log.mountainName}
                       </TableCell>
-                      <TableCell className="text-slate-300">
+                      <TableCell className="text-card-foreground">
                         {log.eventType}
                       </TableCell>
-                      <TableCell className="text-slate-300">
+                      <TableCell className="text-card-foreground">
                         {log.hectaresAffected} ha
                       </TableCell>
                       <TableCell>
@@ -277,8 +269,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-      </main>
     </div>
   );
 };
