@@ -44,7 +44,7 @@ const Dashboard = () => {
 
       <main className="flex-1 ml-0 lg:ml-72 overflow-y-auto w-full lg:w-auto">
         <div
-          className="relative h-64 bg-cover bg-center"
+          className="relative h-52 md:h-64 bg-cover bg-center"
           style={{
             backgroundImage: 'url(https://images.pexels.com/photos/40996/south-america-continent-land-map-40996.jpeg)',
             backgroundPosition: 'center',

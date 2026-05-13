@@ -9,7 +9,7 @@ const MapTrendSection = ({ MapView, mountains, historicalData }) => (
       <CardHeader>
         <CardTitle className="text-white flex items-center justify-between">
           <span>{DASHBOARD_COPY.mapHub}</span>
-          <div className="flex items-center space-x-3 text-xs">
+          <div className="flex items-center gap-2 text-[11px] md:text-xs">
             <div className="flex items-center space-x-1">
               <div className="h-3 w-3 bg-rose-500 rounded-full" />
               <span className="text-slate-400">{DASHBOARD_COPY.critical}</span>
@@ -26,7 +26,7 @@ const MapTrendSection = ({ MapView, mountains, historicalData }) => (
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-96">
+        <div className="h-80 md:h-96">
           <MapView mountains={mountains} />
         </div>
         <p className="text-xs text-slate-400 mt-2">{DASHBOARD_COPY.mapHint}</p>
@@ -38,7 +38,7 @@ const MapTrendSection = ({ MapView, mountains, historicalData }) => (
         <CardTitle className="text-white">{DASHBOARD_COPY.trendTitle}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-96">
+        <div className="h-80 md:h-96">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={historicalData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
