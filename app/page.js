@@ -51,10 +51,10 @@ const Dashboard = () => {
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/90 to-slate-950" />
-          <div className="relative h-full flex flex-col justify-center px-8">
-            <h1 className="text-4xl font-bold text-white mb-2">{DASHBOARD_COPY.heroTitle}</h1>
+          <div className="relative h-full flex flex-col justify-center px-5 md:px-8 pt-8 md:pt-0">
+            <h1 className="text-4xl md:text-4xl font-bold text-white mb-2 leading-tight">{DASHBOARD_COPY.heroTitle}</h1>
             <p className="text-slate-300 text-lg">{DASHBOARD_COPY.heroSubtitle}</p>
-            <div className="mt-4 flex items-center space-x-6">
+            <div className="mt-4 flex flex-wrap items-center gap-3 md:gap-6">
               <div className="flex items-center space-x-2">
                 <div className="h-3 w-3 bg-emerald-500 rounded-full animate-pulse" />
                 <span className="text-sm text-slate-300">{DASHBOARD_COPY.systemOnline}</span>
@@ -69,7 +69,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="p-8 space-y-6">
+        <div className="p-4 pt-6 md:p-8 space-y-4 md:space-y-6">
           <KpiCards metrics={metrics} historicalData={historicalData} />
           <MapTrendSection MapView={MapView} mountains={mountains} historicalData={historicalData} />
           <ActivityLogsTable alertLogs={alertLogs} />

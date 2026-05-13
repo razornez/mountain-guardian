@@ -27,6 +27,14 @@ const Sidebar = () => {
     setIsOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const alertCount = mountains.filter((m) => m.status === 'critical').length;
 
   const navItems = [
@@ -46,7 +54,7 @@ const Sidebar = () => {
         aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-[70] lg:hidden bg-slate-900/95 hover:bg-slate-800 text-white border border-slate-700 touch-manipulation"
+        className="fixed top-3 left-3 z-[80] lg:hidden bg-slate-900/95 hover:bg-slate-800 text-white border border-slate-700 touch-manipulation shadow-sm"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -54,8 +62,8 @@ const Sidebar = () => {
 
       <aside
         className={`
-          fixed left-0 top-0 h-screen w-[80vw] max-w-72 bg-slate-900 border-r border-slate-800
-          flex flex-col z-[60] transition-transform duration-300
+          fixed left-0 top-0 h-screen w-[88vw] max-w-80 bg-slate-900 border-r border-slate-800
+          flex flex-col z-[70] transition-transform duration-300 shadow-2xl
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
@@ -111,7 +119,7 @@ const Sidebar = () => {
                     `}
                   >
                     <Icon className="h-5 w-5" />
-                    <span className="font-medium text-sm md:text-base">{item.label}</span>
+                    <span className="font-medium text-sm truncate">{item.label}</span>
                     {item.badge !== undefined && item.badge > 0 && (
                       <Badge variant="destructive" className="ml-auto whitespace-nowrap">
                         {item.badge}
@@ -134,7 +142,7 @@ const Sidebar = () => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/55 z-50 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-[1px] z-[65] lg:hidden"
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />
